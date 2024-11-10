@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carrito de Compras - Administración y Vista Cliente</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        /* Estilos generales */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            width: 90%;
+            margin: auto;
+            padding: 20px;
+        }
+        .product-info {
+            margin-top: 10px;
+        }
+        .btn {
+            padding: 10px 15px;
+            border: none;
+            cursor: pointer;
+            border-radius: 3px;
+            font-size: 1rem;
+            transition: 0.3s ease;
+        }
+        .btn-save {
+            background-color: #28a745;
+            color: #fff;
+        }
+        .btn-publish {
+            background-color: #ffc107;
+            color: #333;
+        }
+        .admin-header {
+            background-color: #007bff;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+            margin-top: 10px;
+        }
+        .client-header {
+            background-color: #28a745;
+            color: #fff;
+            padding: 10px;
+            text-align: center;
+            margin-top: 20px;
+            margin-bottom: 30px;
+        }
+        .carousel-item {
+            text-align: center;
+        }
+        .carousel-item img {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 10px;
+        }
+        .header {
+            background-color: #2a3b4c;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 1.8rem;
+        }
+        .navbar {
+            background-color: #2a3b4c;
+        }
+        .navbar-nav .nav-link {
+            color: white;
+            font-weight: bold;
+        }
+        .navbar-nav .nav-link.active, .navbar-nav .nav-link:hover {
+            color: #0dbd8b;
+        }
+        /* Estilo del carrito */
+        .cart-icon {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background-color: #28a745;
+            color: white;
+            border-radius: 50%;
+            padding: 15px;
+            cursor: pointer;
+            font-size: 1.5rem;
+            z-index: 1000;
+        }
+        .modal-header {
+            background-color: #28a745;
+            color: white;
+        }
+        .modal-body {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .modal-footer {
+            background-color: #f1f1f1;
+        }
+    </style>
+</head>
+<body>
+
+<!-- Encabezado con menú -->
+<nav class="navbar navbar-expand-lg navbar-dark">
+    <div class="container">
+        <a class="navbar-brand" href="#">EMPRENDE TEC</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#portfolio">Portafolio</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#about">Sobre Nosotros</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#contact">Contacto</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="container">
+    <div class="admin-header">
+        <h2>Vista de Administración de Productos</h2>
+    </div>
+    <!-- Formulario para agregar un producto -->
+    <div class="product-info">
+        <h4>Agregar Nuevo Producto</h4>
+        <form id="addProductForm">
+            <div class="form-group">
+                <label for="newName">Nombre:</label>
+                <input type="text" class="form-control" id="newName" placeholder="Nombre del producto">
+            </div>
+            <div class="form-group">
+                <label for="newDesc">Descripción:</label>
+                <input type="text" class="form-control" id="newDesc" placeholder="Descripción del producto">
+            </div>
+            <div class="form-group">
+                <label for="newPrice">Precio:</label>
+                <input type="text" class="form-control" id="newPrice" placeholder="Precio del producto">
+            </div>
+            <div class="form-group">
+                <label for="newImg">Imagen URL:</label>
+                <input type="text" class="form-control" id="newImg" placeholder="URL de la imagen del producto">
+            </div>
+            <button type="submit" class="btn btn-success">Agregar Producto</button>
+        </form>
+    </div>
+</div>
+
+<script>
+    // Función para agregar un nuevo producto
+    document.getElementById("addProductForm").addEventListener("submit", function(event) {
+        event.preventDefault();
+        
+        const newName = document.getElementById("newName").value;
+        const newDesc = document.getElementById("newDesc").value;
+        const newPrice = document.getElementById("newPrice").value;
+        const newImg = document.getElementById("newImg").value;
+
+        if (newName && newDesc && newPrice && newImg) {
+            const newProduct = {
+                id: products.length + 1, // Incrementar el ID basado en la cantidad de productos
+                name: newName,
+                desc: newDesc,
+                price: newPrice,
+                img: newImg
+            };
+
+            products.push(newProduct); // Agregar el nuevo producto al arreglo
+            alert("Producto agregado correctamente");
+
+            // Actualizar el carrusel de cliente con el nuevo producto
+            updateClientCarousel();
+
+            // Limpiar el formulario
+            document.getElementById("addProductForm").reset();
+        } else {
+            alert("Por favor, complete todos los campos");
+        }
+    });
+</script>
+
+<div class="container">
+    <div class="client-header">
+        <h2>Vista de Cliente - Productos Disponibles</h2>
+    </div>
+    <div id="clientViewCarousel" class="carousel slide" data-ride="carousel">
+        <div class="carousel-inner" id="clientCarouselItems"></div>
+        <a class="carousel-control-prev" href="#clientViewCarousel" role="button" data-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="sr-only">Anterior</span>
+        </a>
+        <a class="carousel-control-next" href="#clientViewCarousel" role="button" data-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="sr-only">Siguiente</span>
+        </a>
+    </div>
+</div>
+
+<!-- Botón de carrito -->
+<div class="cart-icon" data-toggle="modal" data-target="#cartModal">
+    🛒
+</div>
+
+<!-- Modal de carrito -->
+<div class="modal fade" id="cartModal" tabindex="-1" role="dialog" aria-labelledby="cartModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="cartModalLabel">Carrito de Compras</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="cartContent">
+                <!-- Productos del carrito se agregarán aquí -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-success">Proceder al Pago</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    let products = [
+        { id: 1, name: "Producto 1", desc: "Descripción del producto 1", price: "$10000", img: "https://via.placeholder.com/150" },
+        { id: 2, name: "Producto 2", desc: "Descripción del producto 2", price: "$15000", img: "https://via.placeholder.com/150" }
+    ];
+    let cart = [];
+
+    function updateClientCarousel() {
+        const carouselItems = document.getElementById("clientCarouselItems");
+        carouselItems.innerHTML = '';
+
+        products.forEach((product, index) => {
+            const activeClass = index === 0 ? "active" : "";
+            const productHtml = `
+                <div class="carousel-item ${activeClass}">
+                    <img src="${product.img}" alt="${product.name}">
+                    <h3>${product.name}</h3>
+                    <p>${product.desc}</p>
+                    <p><strong>Precio:</strong> ${product.price}</p>
+                    <button class="btn btn-success" onclick="addToCart(${product.id})">Agregar al Carrito</button>
+                </div>
+            `;
+            carouselItems.innerHTML += productHtml;
+        });
+    }
+
+    function addToCart(productId) {
+        const product = products.find(p => p.id === productId);
+        cart.push(product);
+        updateCartModal();
+    }
+
+    function updateCartModal() {
+        const cartContent = document.getElementById("cartContent");
+        cartContent.innerHTML = '';
+
+        cart.forEach(product => {
+            const cartItemHtml = `
+                <div class="cart-item">
+                    <img src="${product.img}" alt="${product.name}" style="width: 50px; height: 50px;">
+                    <span>${product.name} - ${product.price}</span>
+                </div>
+            `;
+            cartContent.innerHTML += cartItemHtml;
+        });
+    }
+
+    // Inicializamos el carrusel
+    updateClientCarousel();
+</script>
+
+
+</body>
+</html>
